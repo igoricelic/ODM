@@ -40,7 +40,7 @@ public class CrudRepositoryImpl<T> extends RepositoryImpl<T> implements CrudRepo
 		}
 	}
 	
-	private T extractDocument(Document document, MDocument documentMedata) {
+	protected T extractDocument(Document document, MDocument documentMedata) {
 		try {
 			T result = (T) documentMedata.getEntityClass().getConstructor().newInstance();
 			for(MField fieldMetadata: documentMedata.getFields()) {
@@ -91,7 +91,7 @@ public class CrudRepositoryImpl<T> extends RepositoryImpl<T> implements CrudRepo
 		}
 	}
 	
-	private Document prepareDocument (T t, MDocument documentMetadata) {
+	protected Document prepareDocument (T t, MDocument documentMetadata) {
 		try {
 			Document document = new Document();
 			Object value = null;

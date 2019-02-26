@@ -6,10 +6,10 @@ import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.Specification;
 
 public interface SpecificationRepository<T> extends CrudRepository<T> {
 	
-	public List<T> readBy (Specification specification);
+	public List<T> readBy (Specification<T> specification);
 	
-	public int countBy (Specification specification);
+	public long countBy (Specification<T> specification);
 	
-	public boolean existBy (Specification specification);
+	public boolean existBy (Specification<T> specification);
 
 }

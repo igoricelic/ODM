@@ -6,6 +6,7 @@ import java.util.List;
 import com.orm.v_1.SimpleDocumentMapper.model.MDatabase;
 import com.orm.v_1.SimpleDocumentMapper.odm.config.IndigoConfigurator;
 import com.orm.v_1.SimpleDocumentMapper.odm.config.impl.IndigoConfiguratorImpl;
+import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.Specification;
 import com.orm.v_1.SimpleDocumentMapper.repositories.CrudRepository;
 import com.orm.v_1.SimpleDocumentMapper.test.entities.Address;
 import com.orm.v_1.SimpleDocumentMapper.test.entities.Car;

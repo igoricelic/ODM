@@ -35,6 +35,15 @@ public class MDocument {
 		return true;
 	}
 	
+	public String getNameInDatabaseByNameInModel (String nameInModel) {
+		for(MField mField: fields) {
+			if(mField.getNameInModel().equals(nameInModel)) {
+				return mField.getNameInDatabase();
+			}
+		}
+		return null;
+	}
+	
 	public String getCollection() {
 		return collection;
 	}

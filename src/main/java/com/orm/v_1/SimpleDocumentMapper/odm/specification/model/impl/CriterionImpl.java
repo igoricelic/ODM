@@ -2,7 +2,6 @@ package com.orm.v_1.SimpleDocumentMapper.odm.specification.model.impl;
 
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.Criterion;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.enums.Comparator;
-import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.enums.Operator;
 
 public class CriterionImpl implements Criterion {
 	
@@ -12,30 +11,25 @@ public class CriterionImpl implements Criterion {
 	
 	private Comparator comparator;
 	
-	private Operator operator;
+	public CriterionImpl(String field, Object value, Comparator comparator) {
+		this.field = field;
+		this.value = value;
+		this.comparator = comparator;
+	}
 
 	@Override
 	public String getField() {
-		// TODO Auto-generated method stub
-		return null;
+		return field;
 	}
 
 	@Override
 	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return value;
 	}
 
 	@Override
 	public Comparator getComparator() {
-		// TODO Auto-generated method stub
-		return null;
+		return comparator;
 	}
-
-	@Override
-	public Operator getOperator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }
