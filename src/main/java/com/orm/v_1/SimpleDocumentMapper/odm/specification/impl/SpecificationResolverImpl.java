@@ -1,10 +1,13 @@
 package com.orm.v_1.SimpleDocumentMapper.odm.specification.impl;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bson.conversions.Bson;
+
 import com.orm.v_1.SimpleDocumentMapper.model.MDocument;
+import com.orm.v_1.SimpleDocumentMapper.model.MField;
 import com.orm.v_1.SimpleDocumentMapper.model.util.Util;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.SpecificationResolver;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.Criterion;
@@ -47,7 +50,8 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 	}
 	
 	private Bson processingSingleCriterion (Criterion criterion) {
-		String nameInDatabase = documentMetadata.getNameInDatabaseByNameInModel(criterion.getField());
+		String nameInDatabase = prepareFieldName(criterion.getField());
+		System.out.println(">>> "+nameInDatabase);
 		/**
 		 * Ostalo je dopuniti logikom za ugnjezdene objekte npr u odjektu user imamo ugnjezdeni objekat
 		 * City -> city.address ili visestruki nivo city.address.street
@@ -82,6 +86,24 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 				break;
 		}
 		return null;
+	}
+	
+	private String prepareFieldName (String nameInModel) {
+		String[] tokens = nameInModel.split(".");
+		Iterator<String> tokenIterator = List.of(tokens).iterator();
+		StringBuilder stringBuilder = new StringBuilder();
+		MField fieldMetadata = null;
+		
+		while(tokenIterator.hasNext()) {
+			fieldMetadata = documentMetadata.getFieldMetadataByNameInModel(tokenIterator.next());
+			if(Util.isNull(fieldMetadata)) {
+				// TODO: Exception
+			}
+			stringBuilder.append(fieldMetadata.getNameInDatabase());
+			if(tokenIterator.hasNext()) stringBuilder.append(".");
+		}
+		
+		return stringBuilder.toString();
 	}
 
 
