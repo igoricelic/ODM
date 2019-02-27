@@ -17,7 +17,7 @@ import com.orm.v_1.SimpleDocumentMapper.repositories.SpecificationRepository;
 
 public class SpecificationRepositoryImpl<T> extends CrudRepositoryImpl<T> implements SpecificationRepository<T> {
 
-	private SpecificationResolver specificationResolver;
+	protected SpecificationResolver specificationResolver;
 	
 	public SpecificationRepositoryImpl(MDocument documentMetadata, ConnectionPool connectionPoolReference) {
 		super(documentMetadata, connectionPoolReference);
@@ -30,7 +30,6 @@ public class SpecificationRepositoryImpl<T> extends CrudRepositoryImpl<T> implem
 			List<T> results = new ArrayList<>();
 			MongoCollection<Document> collectionCursor = connectionPoolReference.provideCollectionCursor(documentMetadata.getCollection());
 			Bson searchFilter = specificationResolver.processing(specification);
-			System.out.println(searchFilter.toString());
 			Iterator<Document> documentIterator = collectionCursor.find(searchFilter).iterator();
 			while(documentIterator.hasNext()) results.add(extractDocument(documentIterator.next(), documentMetadata));
 			return results;
@@ -55,6 +54,12 @@ public class SpecificationRepositoryImpl<T> extends CrudRepositoryImpl<T> implem
 	@Override
 	public boolean existBy(Specification<T> specification) {
 		return (countBy(specification) > 0) ? true : false;
+	}
+
+	@Override
+	public List<T> deleteBy(Specification<T> specification) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

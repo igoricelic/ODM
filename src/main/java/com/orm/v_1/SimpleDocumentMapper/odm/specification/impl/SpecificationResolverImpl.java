@@ -1,7 +1,8 @@
 package com.orm.v_1.SimpleDocumentMapper.odm.specification.impl;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.bson.conversions.Bson;
@@ -16,6 +17,8 @@ import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.enums.Operator;
 
 public class SpecificationResolverImpl implements SpecificationResolver {
 
+	private static final String DOT = ".";
+	
 	private MDocument documentMetadata;
 
 	public SpecificationResolverImpl(MDocument documentMetadata) {
@@ -73,11 +76,12 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 			case NotEquals:
 				return com.mongodb.client.model.Filters.ne(nameInDatabase, criterion.getValue());
 			case StartsWith:
-				break;
+				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile(criterion.getValue() + "[a-z]+"));
 			case EndsWith:
-				break;
+				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile("[a-z]+" + criterion.getValue()));
 			case Contains:
-				break;
+				// ne radi
+				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile("[a-z]+" + criterion.getValue()) + "[a-z]+");
 			case Before:
 				break;
 			case After:
@@ -89,20 +93,21 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 	}
 	
 	private String prepareFieldName (String nameInModel) {
-		String[] tokens = nameInModel.split(".");
-		Iterator<String> tokenIterator = List.of(tokens).iterator();
+		StringTokenizer tokens = new StringTokenizer(nameInModel, DOT);
 		StringBuilder stringBuilder = new StringBuilder();
 		MField fieldMetadata = null;
-		
-		while(tokenIterator.hasNext()) {
-			fieldMetadata = documentMetadata.getFieldMetadataByNameInModel(tokenIterator.next());
+		MDocument currDocumentMetadata = documentMetadata;
+		while(tokens.hasMoreElements()) {
+			fieldMetadata = currDocumentMetadata.getFieldMetadataByNameInModel(tokens.nextElement().toString());
 			if(Util.isNull(fieldMetadata)) {
 				// TODO: Exception
 			}
 			stringBuilder.append(fieldMetadata.getNameInDatabase());
-			if(tokenIterator.hasNext()) stringBuilder.append(".");
+			if(tokens.hasMoreElements()) {
+				currDocumentMetadata = fieldMetadata.getEmbeddedDocumentMetadata();
+				stringBuilder.append(DOT);
+			}
 		}
-		
 		return stringBuilder.toString();
 	}
 

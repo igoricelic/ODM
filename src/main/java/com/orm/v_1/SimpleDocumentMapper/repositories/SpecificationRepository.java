@@ -11,5 +11,7 @@ public interface SpecificationRepository<T> extends CrudRepository<T> {
 	public long countBy (Specification<T> specification);
 	
 	public boolean existBy (Specification<T> specification);
+	
+	public List<T> deleteBy (Specification<T> specification);
 
 }

@@ -19,13 +19,36 @@ public class MainTestSpecification {
 
 			SpecificationRepository<Contact> contactDao = indigoConfigurator.provideSpecificationRepository(Contact.class);
 			
+//			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+//					.addCriterion("firstName", "Igor", Comparator.Equality)
+//					.addCriterion("firstName", "Pera", Comparator.Equality).operator(Operator.Or).build();
+			
+//			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+//					.addCriterion("address.street", "Bulevar Mihajla Pupina", Comparator.Equality).build();
+			
+//			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+//					.addCriterion("address.city.postCode", 32240, Comparator.Equality).build();
+			
+//			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+//					.addCriterion("resources.value", "0638862088", Comparator.Equality).build();
+			
+//			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+//					.addCriterion("lastName", "Icelic", Comparator.Equality)
+//					.addCriterion("address.city.name", "Lucani", Comparator.Equality).operator(Operator.Or).build();
+			
+//			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+//					.addCriterion("firstName", "Ig", Comparator.StartsWith).build();
+			
 			Specification<Contact> specification = new SpecificationBuilder<Contact>()
-					.addCriterion("firstName", "Igor", Comparator.Equality)
-					.addCriterion("age", 30, Comparator.LessThan).operator(Operator.Or).build();
+					.addCriterion("firstName", "go", Comparator.Contains).build();
+
+//			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+//					.addCriterion("firstName", "a", Comparator.EndsWith).build();
 			
 			System.out.println(contactDao.count());
 			
 			List<Contact> contacts = contactDao.readBy(specification);
+//			List<Contact> contacts = contactDao.readAll();
 			for(Contact contact: contacts) {
 				System.out.println(contact);
 			}

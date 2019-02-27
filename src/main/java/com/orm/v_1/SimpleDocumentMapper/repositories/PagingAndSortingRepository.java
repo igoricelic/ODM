@@ -15,10 +15,10 @@ public interface PagingAndSortingRepository<T> extends SpecificationRepository<T
 	
 	public Page<T> readAll (PageRequest pageRequest, SortRequest sortRequest);
 	
-	public Page<T> findBy (Specification specification, PageRequest pageRequest);
+	public Page<T> readBy (Specification<T> specification, PageRequest pageRequest);
 	
-	public List<T> findBy (Specification specification, SortRequest sortRequest);
+	public List<T> readBy (Specification<T> specification, SortRequest sortRequest);
 	
-	public Page<T> findBy (Specification specification, PageRequest pageRequest, SortRequest sortRequest);
+	public Page<T> readBy (Specification<T> specification, PageRequest pageRequest, SortRequest sortRequest);
 	
 }

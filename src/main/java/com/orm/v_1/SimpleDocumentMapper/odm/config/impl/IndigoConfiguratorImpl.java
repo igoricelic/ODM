@@ -11,8 +11,10 @@ import com.orm.v_1.SimpleDocumentMapper.odm.config.IndigoConfigurator;
 import com.orm.v_1.SimpleDocumentMapper.odm.scanner.ModelMapperScanner;
 import com.orm.v_1.SimpleDocumentMapper.odm.scanner.impl.ModelMapperScannerImpl;
 import com.orm.v_1.SimpleDocumentMapper.repositories.CrudRepository;
+import com.orm.v_1.SimpleDocumentMapper.repositories.PagingAndSortingRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.SpecificationRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.impl.CrudRepositoryImpl;
+import com.orm.v_1.SimpleDocumentMapper.repositories.impl.PagingAndSortingRepositoryImpl;
 import com.orm.v_1.SimpleDocumentMapper.repositories.impl.SpecificationRepositoryImpl;
 
 public class IndigoConfiguratorImpl implements IndigoConfigurator {
@@ -48,6 +50,16 @@ public class IndigoConfiguratorImpl implements IndigoConfigurator {
 		if(optionalDocumentMetadata.isPresent()) {
 			MDocument document = optionalDocumentMetadata.get();
 			return new SpecificationRepositoryImpl<>(document, connectionPool);
+		}
+		throw new NotSupportEntity("This isn't entity class!");
+	}
+
+	@Override
+	public <T> PagingAndSortingRepository<T> providePagingAndSortingRepository(Class<?> entity) {
+		Optional<MDocument> optionalDocumentMetadata = mDatabase.getDocumentMetadata(entity);
+		if(optionalDocumentMetadata.isPresent()) {
+			MDocument document = optionalDocumentMetadata.get();
+			return new PagingAndSortingRepositoryImpl<>(document, connectionPool);
 		}
 		throw new NotSupportEntity("This isn't entity class!");
 	}
