@@ -44,6 +44,15 @@ public class MDocument {
 		return null;
 	}
 	
+	public MField getFieldMetadataByNameInModel (String nameInModel) {
+		for(MField mField: fields) {
+			if(mField.getNameInModel().equals(nameInModel)) {
+				return mField;
+			}
+		}
+		return null;
+	}
+	
 	public String getCollection() {
 		return collection;
 	}
