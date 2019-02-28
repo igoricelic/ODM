@@ -13,6 +13,8 @@ public enum Comparator {
 	GreaterThanEquality,
 
 	NotEquals,
+	
+	In,
 
 	StartsWith,
 

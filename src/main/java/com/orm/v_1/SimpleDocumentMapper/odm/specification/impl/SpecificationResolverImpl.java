@@ -71,6 +71,8 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 				return com.mongodb.client.model.Filters.gte(nameInDatabase, criterion.getValue());
 			case NotEquals:
 				return com.mongodb.client.model.Filters.ne(nameInDatabase, criterion.getValue());
+			case In:
+				return com.mongodb.client.model.Filters.in(nameInDatabase, criterion.getValue());
 			case StartsWith:
 				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile(criterion.getValue() + "([\\w]+)?"));
 			case EndsWith:
