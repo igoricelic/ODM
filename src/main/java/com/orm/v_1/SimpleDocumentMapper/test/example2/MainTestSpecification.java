@@ -39,11 +39,11 @@ public class MainTestSpecification {
 //			Specification<Contact> specification = new SpecificationBuilder<Contact>()
 //					.addCriterion("firstName", "Ig", Comparator.StartsWith).build();
 			
-			Specification<Contact> specification = new SpecificationBuilder<Contact>()
-					.addCriterion("firstName", "go", Comparator.Contains).build();
-
 //			Specification<Contact> specification = new SpecificationBuilder<Contact>()
-//					.addCriterion("firstName", "a", Comparator.EndsWith).build();
+//					.addCriterion("firstName", "go", Comparator.Contains).build();
+
+			Specification<Contact> specification = new SpecificationBuilder<Contact>()
+					.addCriterion("firstName", "or", Comparator.EndsWith).build();
 			
 			System.out.println(contactDao.count());
 			

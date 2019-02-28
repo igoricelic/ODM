@@ -55,10 +55,6 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 	private Bson processingSingleCriterion (Criterion criterion) {
 		String nameInDatabase = prepareFieldName(criterion.getField());
 		System.out.println(">>> "+nameInDatabase);
-		/**
-		 * Ostalo je dopuniti logikom za ugnjezdene objekte npr u odjektu user imamo ugnjezdeni objekat
-		 * City -> city.address ili visestruki nivo city.address.street
-		 */
 		if(nameInDatabase == null) {
 			// TODO: Exception
 		}
@@ -76,12 +72,11 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 			case NotEquals:
 				return com.mongodb.client.model.Filters.ne(nameInDatabase, criterion.getValue());
 			case StartsWith:
-				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile(criterion.getValue() + "[a-z]+"));
+				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile(criterion.getValue() + "([\\w]+)?"));
 			case EndsWith:
-				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile("[a-z]+" + criterion.getValue()));
+				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile("([\\w]+)?" + criterion.getValue()));
 			case Contains:
-				// ne radi
-				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile("[a-z]+" + criterion.getValue()) + "[a-z]+");
+				return com.mongodb.client.model.Filters.regex(nameInDatabase, Pattern.compile("([\\w]+)?" + criterion.getValue()) + "([\\w]+)?");
 			case Before:
 				break;
 			case After:
