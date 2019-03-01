@@ -46,7 +46,7 @@ public class MDocument {
 	
 	public MField getFieldMetadataByNameInModel (String nameInModel) {
 		for(MField mField: fields) {
-			if(mField.getNameInModel().equals(nameInModel)) {
+			if(mField.getNameInModel().equalsIgnoreCase(nameInModel)) {
 				return mField;
 			}
 		}

@@ -13,6 +13,8 @@ public class Token {
 	
 	private MField fieldMetadata;
 	
+	private boolean join;
+	
 	public Token(String value, TokenType tokenType) {
 		this.value = value;
 		this.tokenType = tokenType;
@@ -42,6 +44,14 @@ public class Token {
 	
 	public MField getFieldMetadata() {
 		return fieldMetadata;
+	}
+	
+	public boolean isJoin() {
+		return join;
+	}
+	
+	public void setJoin(boolean join) {
+		this.join = join;
 	}
 
 }
