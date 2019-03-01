@@ -25,19 +25,19 @@ public class MainTest {
 			
 			LexerProvider lexerProvider = new LexerProviderImpl();
 			
-			String method1 = "readByFirstName";
+			String method1 = "readByFirstNameEq";
 			List<Token> tokens1 = lexerProvider.processing(method1, documentMetadata);
 			System.out.println(tokens1.size());
 			
-			String method2 = "readByFirstNameAndLastName";
+			String method2 = "readByFirstNameAndLastNameEq";
 			List<Token> tokens2 = lexerProvider.processing(method2, documentMetadata);
 			System.out.println(tokens2.size());
 			
-			String method3 = "readByAddress_HouseNumber";
+			String method3 = "readByAddress_HouseNumberEq";
 			List<Token> tokens3 = lexerProvider.processing(method3, documentMetadata);
 			System.out.println(tokens3.size());
 			
-			String method4 = "readByAddress_HouseNumberAndAddress_City_Name";
+			String method4 = "readByAddress_HouseNumberEqAndAddress_City_NameEq";
 			List<Token> tokens4 = lexerProvider.processing(method4, documentMetadata);
 			System.out.println(tokens4.size());
 			
