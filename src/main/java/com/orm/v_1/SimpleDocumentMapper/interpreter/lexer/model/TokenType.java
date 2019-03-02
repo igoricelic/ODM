@@ -4,6 +4,8 @@ public enum TokenType {
 	
 	RESERVED_KEYWORD,
 	
+	COMPARATOR,
+	
 	VARIABLE;
 
 }

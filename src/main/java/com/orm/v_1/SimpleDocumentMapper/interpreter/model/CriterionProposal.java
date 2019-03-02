@@ -1,5 +1,6 @@
 package com.orm.v_1.SimpleDocumentMapper.interpreter.model;
 
+import com.orm.v_1.SimpleDocumentMapper.model.MField;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.enums.Comparator;
 
 public class CriterionProposal {
@@ -8,12 +9,11 @@ public class CriterionProposal {
 	
 	private Comparator comparator;
 	
-	private Class<?> javaType;
+	private MField fieldMetadata;
 	
-	public CriterionProposal(String field, Comparator comparator, Class<?> javaType) {
+	public CriterionProposal(String field, MField fieldMetadata) {
 		this.field = field;
-		this.comparator = comparator;
-		this.javaType = javaType;
+		this.fieldMetadata = fieldMetadata;
 	}
 	
 	public String getField() {
@@ -24,8 +24,12 @@ public class CriterionProposal {
 		return comparator;
 	}
 	
-	public Class<?> getJavaType() {
-		return javaType;
+	public void setComparator(Comparator comparator) {
+		this.comparator = comparator;
+	}
+	
+	public MField getFieldMetadata() {
+		return fieldMetadata;
 	}
 
 }

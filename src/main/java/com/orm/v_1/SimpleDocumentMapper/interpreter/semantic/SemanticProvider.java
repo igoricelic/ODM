@@ -3,10 +3,10 @@ package com.orm.v_1.SimpleDocumentMapper.interpreter.semantic;
 import java.util.List;
 
 import com.orm.v_1.SimpleDocumentMapper.interpreter.lexer.model.Token;
-import com.orm.v_1.SimpleDocumentMapper.interpreter.model.SpecificationProposal;
+import com.orm.v_1.SimpleDocumentMapper.interpreter.model.MethodMetadata;
 
 public interface SemanticProvider {
 	
-	public SpecificationProposal processing (List<Token> tokens);
+	public MethodMetadata processing (List<Token> tokens);
 
 }
