@@ -17,6 +17,7 @@ public class SemanticProviderImpl implements SemanticProvider {
 	public MethodMetadata processing(List<Token> tokens) {
 		MethodMetadata methodMetadata = new MethodMetadata();
 		Token currToken = null, tempToken = null;
+		int argumentPosition = 0;
 		if(tokens.size() < 3) {
 			// TODO: Exception
 		}
@@ -56,10 +57,12 @@ public class SemanticProviderImpl implements SemanticProvider {
 					// nakon varijable mora stajati comparator
 				}
 				i++;
+				tempCriterion.setArgumentPosition(argumentPosition++);
 				tempCriterion.setComparator(tempToken.getComparator());
 				specificationProposal.getCriterionProposals().add(tempCriterion);
 			}
 		}
+		methodMetadata.setTotalArguments(argumentPosition);
 		methodMetadata.setSpecificationProposal(specificationProposal);
 		return methodMetadata;
 	}

@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 
 import org.bson.conversions.Bson;
 
+import com.orm.v_1.SimpleDocumentMapper.interpreter.model.CriterionProposal;
+import com.orm.v_1.SimpleDocumentMapper.interpreter.model.SpecificationProposal;
 import com.orm.v_1.SimpleDocumentMapper.model.MDocument;
 import com.orm.v_1.SimpleDocumentMapper.model.MField;
 import com.orm.v_1.SimpleDocumentMapper.model.util.Util;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.SpecificationResolver;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.Criterion;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.Specification;
+import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.builders.SpecificationBuilder;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.enums.Operator;
 
 public class SpecificationResolverImpl implements SpecificationResolver {
@@ -54,7 +57,6 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 	
 	private Bson processingSingleCriterion (Criterion criterion) {
 		String nameInDatabase = prepareFieldName(criterion.getField());
-		System.out.println(">>> "+nameInDatabase);
 		if(nameInDatabase == null) {
 			// TODO: Exception
 		}
@@ -106,6 +108,25 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 			}
 		}
 		return stringBuilder.toString();
+	}
+
+	@Override
+	public <T> Specification<T> prepareSpecificaiton(SpecificationProposal specificationProposal, Object[] args) {
+		SpecificationBuilder<T> builder = new SpecificationBuilder<>();
+		specificationProposal.getSpecificationProposals().forEach(embedderSpecificationProposal -> builder.where(prepareSpecificaiton(embedderSpecificationProposal, args)));
+		
+		for(CriterionProposal criterionProposal: specificationProposal.getCriterionProposals()) {
+			Object value = args[criterionProposal.getArgumentPosition()];
+			if(!criterionProposal.getFieldMetadata().getJavaType().equals(value.getClass())) {
+				// TODO: Exception
+				System.out.println("Nepoklapanje tipova");
+			}
+			builder.addCriterion(criterionProposal.getField(), value, criterionProposal.getComparator());
+			
+		}
+		if(!Util.isNull(specificationProposal.getOperator())) builder.operator(specificationProposal.getOperator());
+		
+		return builder.build();
 	}
 
 

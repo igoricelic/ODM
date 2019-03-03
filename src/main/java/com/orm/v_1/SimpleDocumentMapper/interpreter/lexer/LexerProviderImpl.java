@@ -42,16 +42,16 @@ public class LexerProviderImpl implements LexerProvider {
 						currToken.setJoin(true);
 						currDocumentMetadata = currToken.getFieldMetadata().getEmbeddedDocumentMetadata();
 						if(compositeTokenValue.toString().length() > 0) compositeTokenValue.append(DOT);
-						compositeTokenValue.append(currToken.getFieldMetadata().getNameInDatabase());
+						compositeTokenValue.append(currToken.getFieldMetadata().getNameInModel());
 						break;
 					}
 					if(currToken.isJoin()|| (!Util.isNull(prevToken) && prevToken.isJoin())) {
 						if(compositeTokenValue.toString().length() > 0) compositeTokenValue.append(DOT);
-						compositeTokenValue.append(currToken.getFieldMetadata().getNameInDatabase());
+						compositeTokenValue.append(currToken.getFieldMetadata().getNameInModel());
 					}
 				}
 			}
-			if (currToken == null)
+			if (Util.isNull(currToken))
 				throw new InvalidTokenException("Invalid token " + potentialTokenBuilder.substring(index));
 			if(!currToken.isJoin()) {
 				currDocumentMetadata = documentMetadata;

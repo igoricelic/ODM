@@ -8,10 +8,12 @@ public interface SpecificationRepository<T> extends CrudRepository<T> {
 	
 	public List<T> readBy (Specification<T> specification);
 	
+	public T readOneBy (Specification<T> specification);
+	
 	public long countBy (Specification<T> specification);
 	
 	public boolean existBy (Specification<T> specification);
 	
-	public List<T> deleteBy (Specification<T> specification);
+	public boolean deleteBy (Specification<T> specification);
 
 }

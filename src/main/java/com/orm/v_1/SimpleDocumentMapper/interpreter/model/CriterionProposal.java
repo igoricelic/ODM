@@ -9,6 +9,8 @@ public class CriterionProposal {
 	
 	private Comparator comparator;
 	
+	private int argumentPosition;
+	
 	private MField fieldMetadata;
 	
 	public CriterionProposal(String field, MField fieldMetadata) {
@@ -30,6 +32,14 @@ public class CriterionProposal {
 	
 	public MField getFieldMetadata() {
 		return fieldMetadata;
+	}
+	
+	public int getArgumentPosition() {
+		return argumentPosition;
+	}
+	
+	public void setArgumentPosition(int argumentPosition) {
+		this.argumentPosition = argumentPosition;
 	}
 
 }

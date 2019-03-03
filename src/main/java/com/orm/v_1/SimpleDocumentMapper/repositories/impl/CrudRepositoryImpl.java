@@ -75,7 +75,7 @@ public class CrudRepositoryImpl<T> extends RepositoryImpl<T> implements CrudRepo
 			}
 			MongoCollection<Document> collectionCursor = connectionPoolReference.provideCollectionCursor(documentMetadata.getCollection());
 			collectionCursor.insertMany(documents);
-			return null;
+			return objects;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -91,7 +91,9 @@ public class CrudRepositoryImpl<T> extends RepositoryImpl<T> implements CrudRepo
 				// TODO: Not value of ID present!
 			}
 			ObjectId objectId = new ObjectId(valueOfId.toString());
-			collectionCursor.updateOne(com.mongodb.client.model.Filters.eq(objectId), prepareDocument(t, documentMetadata));
+			Document document = new Document();
+			document.append("$set", prepareDocument(t, documentMetadata));
+			collectionCursor.updateOne(com.mongodb.client.model.Filters.eq(objectId), document);
 			return t;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,20 +103,47 @@ public class CrudRepositoryImpl<T> extends RepositoryImpl<T> implements CrudRepo
 
 	@Override
 	public Iterable<T> updateMore(Iterable<T> objects) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Iterator<T> objectsIterator = objects.iterator();
+			while(objectsIterator.hasNext()) {
+				updateOne(objectsIterator.next());
+			}
+			return objects;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public T deleteOne(T t) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			MongoCollection<Document> collectionCursor = connectionPoolReference.provideCollectionCursor(documentMetadata.getCollection());
+			Object valueOfId = documentMetadata.getId().getRefField().get(t);
+			if(Util.isNull(valueOfId)) {
+				// TODO: Not value of ID present!
+			}
+			ObjectId objectId = new ObjectId(valueOfId.toString());
+			collectionCursor.deleteOne(com.mongodb.client.model.Filters.eq(objectId));
+			return t;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public Iterable<T> deleteMore(Iterable<T> objects) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Iterator<T> objectsIterator = objects.iterator();
+			while(objectsIterator.hasNext()) {
+				deleteOne(objectsIterator.next());
+			}
+			return objects;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

@@ -14,5 +14,7 @@ public interface IndigoConfigurator {
 	public <T> SpecificationRepository<T> provideSpecificationRepository(Class<?> entity);
 	
 	public <T> PagingAndSortingRepository<T> providePagingAndSortingRepository(Class<?> entity);
+	
+	public <T> T provideProxy (Class<?> repositoryClass, Class<T> entityClass);
 
 }

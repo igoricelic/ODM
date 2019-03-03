@@ -10,6 +10,7 @@ import com.orm.v_1.SimpleDocumentMapper.odm.config.ConnectionPool;
 import com.orm.v_1.SimpleDocumentMapper.odm.config.IndigoConfigurator;
 import com.orm.v_1.SimpleDocumentMapper.odm.scanner.ModelMapperScanner;
 import com.orm.v_1.SimpleDocumentMapper.odm.scanner.impl.ModelMapperScannerImpl;
+import com.orm.v_1.SimpleDocumentMapper.proxy.ProxyRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.CrudRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.PagingAndSortingRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.SpecificationRepository;
@@ -62,6 +63,16 @@ public class IndigoConfiguratorImpl implements IndigoConfigurator {
 			return new PagingAndSortingRepositoryImpl<>(document, connectionPool);
 		}
 		throw new NotSupportEntity("This isn't entity class!");
+	}
+
+	@Override
+	public <T> T provideProxy(Class<?> repositoryClass, Class<T> entityClass) {
+		Optional<MDocument> optionalDocumentMetadata = mDatabase.getDocumentMetadata(entityClass);
+		if(!optionalDocumentMetadata.isPresent()) {
+			// TODO: Exception
+		}
+		MDocument documentMetadata = optionalDocumentMetadata.get();
+		return (T) ProxyRepository.newInstance(new Class[]{ repositoryClass }, documentMetadata, connectionPool);
 	}
 
 }

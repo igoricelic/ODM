@@ -38,6 +38,20 @@ public class SpecificationRepositoryImpl<T> extends CrudRepositoryImpl<T> implem
 			return null;
 		}
 	}
+	
+	@Override
+	public T readOneBy(Specification<T> specification) {
+		try {
+			MongoCollection<Document> collectionCursor = connectionPoolReference.provideCollectionCursor(documentMetadata.getCollection());
+			Bson searchFilter = specificationResolver.processing(specification);
+			Document document = collectionCursor.find(searchFilter).first();
+			return extractDocument(document, documentMetadata);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 
 	@Override
 	public long countBy(Specification<T> specification) {
@@ -57,9 +71,16 @@ public class SpecificationRepositoryImpl<T> extends CrudRepositoryImpl<T> implem
 	}
 
 	@Override
-	public List<T> deleteBy(Specification<T> specification) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean deleteBy(Specification<T> specification) {
+		try {
+			MongoCollection<Document> collectionCursor = connectionPoolReference.provideCollectionCursor(documentMetadata.getCollection());
+			Bson searchFilter = specificationResolver.processing(specification);
+			collectionCursor.deleteMany(searchFilter);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

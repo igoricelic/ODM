@@ -8,7 +8,9 @@ public class MethodMetadata {
 	
 	private Class<?> returnType;
 	
-	private boolean isList, isOptional;
+	private int totalArguments;
+	
+	private boolean isList, isPage, isOptional, isCollection;
 	
 	public MethodPrefixType getMethodPrefixType() {
 		return methodPrefixType;
@@ -39,6 +41,7 @@ public class MethodMetadata {
 	}
 	
 	public void setList(boolean isList) {
+		this.isCollection = isList;
 		this.isList = isList;
 	}
 	
@@ -48,6 +51,27 @@ public class MethodMetadata {
 	
 	public void setOptional(boolean isOptional) {
 		this.isOptional = isOptional;
+	}
+	
+	public boolean isPage() {
+		return isPage;
+	}
+	
+	public void setPage(boolean isPage) {
+		this.isCollection = isPage;
+		this.isPage = isPage;
+	}
+	
+	public boolean isCollection() {
+		return isCollection;
+	}
+	
+	public int getTotalArguments() {
+		return totalArguments;
+	}
+	
+	public void setTotalArguments(int totalArguments) {
+		this.totalArguments = totalArguments;
 	}
 
 }

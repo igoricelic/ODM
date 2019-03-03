@@ -23,7 +23,7 @@ public class TokenProviderImpl implements TokenProvider {
 			new Token("LTE", TokenType.RESERVED_KEYWORD, Comparator.LessThanEquality),
 			new Token("GT", TokenType.RESERVED_KEYWORD, Comparator.GreaterThan),
 			new Token("GTE", TokenType.RESERVED_KEYWORD, Comparator.GreaterThanEquality),
-			new Token("STARTWITH", TokenType.RESERVED_KEYWORD, Comparator.StartsWith),
+			new Token("STARTSWITH", TokenType.RESERVED_KEYWORD, Comparator.StartsWith),
 			new Token("ENDWITH", TokenType.RESERVED_KEYWORD, Comparator.EndsWith),
 			new Token("CONTAINS", TokenType.RESERVED_KEYWORD, Comparator.Contains),
 			new Token("BEFORE", TokenType.RESERVED_KEYWORD, Comparator.Before),
