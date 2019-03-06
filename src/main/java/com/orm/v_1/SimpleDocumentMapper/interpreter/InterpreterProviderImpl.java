@@ -14,6 +14,7 @@ import com.orm.v_1.SimpleDocumentMapper.interpreter.model.MethodPrefixType;
 import com.orm.v_1.SimpleDocumentMapper.interpreter.semantic.SemanticProvider;
 import com.orm.v_1.SimpleDocumentMapper.interpreter.semantic.SemanticProviderImpl;
 import com.orm.v_1.SimpleDocumentMapper.model.MDocument;
+import com.orm.v_1.SimpleDocumentMapper.model.exceptions.NotSupportEntity;
 import com.orm.v_1.SimpleDocumentMapper.odm.structures.Page;
 
 public class InterpreterProviderImpl implements InterpreterProvider {
@@ -58,7 +59,7 @@ public class InterpreterProviderImpl implements InterpreterProvider {
 	            }
 			} else {
 				if(!returnType.equals(documentMetadata.getEntityClass())) {
-					// TODO: Exception
+					throw new NotSupportEntity("Not support entity for this repository!");
 				}
 				methodMetadata.setReturnType(returnType);
 				isResolvedBaseType = true;

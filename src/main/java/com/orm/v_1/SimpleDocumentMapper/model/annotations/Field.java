@@ -11,6 +11,6 @@ public @interface Field {
 	
 	String name() default "";
 	
-	Class<?> targetEntity() default Void.class;
+	Class<?> type() default Void.class;
 
 }

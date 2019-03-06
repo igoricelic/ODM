@@ -11,6 +11,8 @@ import com.orm.v_1.SimpleDocumentMapper.interpreter.model.CriterionProposal;
 import com.orm.v_1.SimpleDocumentMapper.interpreter.model.SpecificationProposal;
 import com.orm.v_1.SimpleDocumentMapper.model.MDocument;
 import com.orm.v_1.SimpleDocumentMapper.model.MField;
+import com.orm.v_1.SimpleDocumentMapper.model.exceptions.FieldNotFoundException;
+import com.orm.v_1.SimpleDocumentMapper.model.exceptions.NotCompatibleTypesException;
 import com.orm.v_1.SimpleDocumentMapper.model.util.Util;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.SpecificationResolver;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.Criterion;
@@ -58,7 +60,7 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 	private Bson processingSingleCriterion (Criterion criterion) {
 		String nameInDatabase = prepareFieldName(criterion.getField());
 		if(nameInDatabase == null) {
-			// TODO: Exception
+			throw new FieldNotFoundException("Not found field: "+criterion.getField());
 		}
 		switch (criterion.getComparator()) {
 			case Equality:
@@ -97,9 +99,10 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 		MField fieldMetadata = null;
 		MDocument currDocumentMetadata = documentMetadata;
 		while(tokens.hasMoreElements()) {
-			fieldMetadata = currDocumentMetadata.getFieldMetadataByNameInModel(tokens.nextElement().toString());
+			String token = tokens.nextElement().toString();
+			fieldMetadata = currDocumentMetadata.getFieldMetadataByNameInModel(token);
 			if(Util.isNull(fieldMetadata)) {
-				// TODO: Exception
+				throw new FieldNotFoundException("Not found field "+token+" in entity "+currDocumentMetadata.getClass().getName());
 			}
 			stringBuilder.append(fieldMetadata.getNameInDatabase());
 			if(tokens.hasMoreElements()) {
@@ -118,8 +121,7 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 		for(CriterionProposal criterionProposal: specificationProposal.getCriterionProposals()) {
 			Object value = args[criterionProposal.getArgumentPosition()];
 			if(!criterionProposal.getFieldMetadata().getJavaType().equals(value.getClass())) {
-				// TODO: Exception
-				System.out.println("Nepoklapanje tipova");
+				throw new NotCompatibleTypesException("Not compatible types: "+criterionProposal.getFieldMetadata().getJavaType().getName()+" "+value.getClass().getName());
 			}
 			builder.addCriterion(criterionProposal.getField(), value, criterionProposal.getComparator());
 			

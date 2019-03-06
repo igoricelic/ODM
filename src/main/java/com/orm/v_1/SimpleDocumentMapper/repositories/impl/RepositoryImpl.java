@@ -66,6 +66,10 @@ public class RepositoryImpl<T> implements Repository<T> {
 				}
 				value = fieldMetadata.getRefField().get(t);
 				if(!Util.isNull(value)) {
+					if(fieldMetadata.isEnum()) {
+						document.append(fieldMetadata.getNameInDatabase(), value.toString());
+						continue;
+					}
 					document.append(fieldMetadata.getNameInDatabase(), value);
 				}
 			}
@@ -102,6 +106,11 @@ public class RepositoryImpl<T> implements Repository<T> {
 				} else if(fieldMetadata.isList()) {
 					List<Object> values = document.getEmbedded(List.of(fieldMetadata.getNameInDatabase()), new ArrayList<Object>());
 					fieldMetadata.getRefField().set(result, values);
+					continue;
+				} else if(fieldMetadata.isEnum()) {
+					String value = document.getString(fieldMetadata.getNameInDatabase());
+					if(Util.isNull(value)) continue;
+					fieldMetadata.getRefField().set(result, Enum.valueOf((Class)fieldMetadata.getJavaType(), value));
 					continue;
 				}
 				fieldMetadata.getRefField().set(result, fieldMetadata.getJavaType().cast(document.get(fieldMetadata.getNameInDatabase())));

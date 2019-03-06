@@ -52,7 +52,7 @@ public class LexerProviderImpl implements LexerProvider {
 				}
 			}
 			if (Util.isNull(currToken))
-				throw new InvalidTokenException("Invalid token " + potentialTokenBuilder.substring(index));
+				throw new InvalidTokenException("Invalid token " + potentialTokenBuilder.substring(index) + " at position "+index);
 			if(!currToken.isJoin()) {
 				currDocumentMetadata = documentMetadata;
 				if(compositeTokenValue.toString().length() > 0) {

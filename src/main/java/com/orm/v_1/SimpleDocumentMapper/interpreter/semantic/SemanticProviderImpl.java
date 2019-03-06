@@ -8,6 +8,8 @@ import com.orm.v_1.SimpleDocumentMapper.interpreter.model.CriterionProposal;
 import com.orm.v_1.SimpleDocumentMapper.interpreter.model.MethodMetadata;
 import com.orm.v_1.SimpleDocumentMapper.interpreter.model.MethodPrefixType;
 import com.orm.v_1.SimpleDocumentMapper.interpreter.model.SpecificationProposal;
+import com.orm.v_1.SimpleDocumentMapper.model.exceptions.InvalidMethodSpecificationException;
+import com.orm.v_1.SimpleDocumentMapper.model.exceptions.InvalidTokenException;
 import com.orm.v_1.SimpleDocumentMapper.model.util.Util;
 import com.orm.v_1.SimpleDocumentMapper.odm.specification.model.enums.Operator;
 
@@ -19,16 +21,16 @@ public class SemanticProviderImpl implements SemanticProvider {
 		Token currToken = null, tempToken = null;
 		int argumentPosition = 0;
 		if(tokens.size() < 3) {
-			// TODO: Exception
+			throw new InvalidMethodSpecificationException("Invalid method specification!");
 		}
 		currToken = tokens.get(0);
 		if(!currToken.getValue().equalsIgnoreCase("READ") && !currToken.getValue().equalsIgnoreCase("COUNT") && !currToken.getValue().equalsIgnoreCase("EXISTS")) {
-			// TODO: Exception
+			throw new InvalidTokenException("The first token in method specification must be READ, COUNT or EXISTS!");
 		}
 		methodMetadata.setMethodPrefixType(MethodPrefixType.valueOf(currToken.getValue()));
 		currToken = tokens.get(1);
 		if(!currToken.getValue().equalsIgnoreCase("BY")) {
-			// TODO: Exception
+			throw new InvalidTokenException("On this position, token must be BY!");
 		}
 		SpecificationProposal specificationProposal = new SpecificationProposal(), tempSpecificationProposal = null;
 		CriterionProposal tempCriterion = null;
@@ -36,13 +38,12 @@ public class SemanticProviderImpl implements SemanticProvider {
 			currToken = tokens.get(i);
 			if(currToken.getValue().equals("AND") || currToken.getValue().equals("OR")) {
 				if(Util.isNull(tempCriterion)) {
-					// TODO: Exception
+					throw new InvalidTokenException("Invalid token position!");
 				}
 				Operator operator = currToken.getValue().equals("AND") ? Operator.And : Operator.Or;
 				if(Util.isNull(specificationProposal.getOperator()))
 					specificationProposal.setOperator(operator);
 				else {
-					// proveriti
 					tempSpecificationProposal = specificationProposal;
 					specificationProposal = new SpecificationProposal();
 					specificationProposal.setOperator(operator);
@@ -53,8 +54,7 @@ public class SemanticProviderImpl implements SemanticProvider {
 				tempCriterion = new CriterionProposal(currToken.getValue(), currToken.getFieldMetadata());
 				tempToken = tokens.get(i+1);
 				if(Util.isNull(tempToken.getComparator())) {
-					// TODO: Exception
-					// nakon varijable mora stajati comparator
+					throw new InvalidTokenException("After variable must be comparator!");
 				}
 				i++;
 				tempCriterion.setArgumentPosition(argumentPosition++);

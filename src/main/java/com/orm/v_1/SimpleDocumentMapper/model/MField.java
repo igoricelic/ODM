@@ -23,7 +23,7 @@ public class MField {
 	 */
 	private boolean embedded;
 	
-	private boolean list;
+	private boolean isList, isEnum;
 	
 	private MDocument embeddedDocumentMetadata;
 	
@@ -31,6 +31,7 @@ public class MField {
 		field.setAccessible(true);
 		this.nameInModel = field.getName();
 		this.javaType = field.getType();
+		if(this.javaType.isEnum()) this.isEnum = true;
 		this.refField = field;
 		this.documentMetadata = documentMetadata;
 		this.nameInDatabase = nameInDatabase;
@@ -91,11 +92,19 @@ public class MField {
 	}
 	
 	public boolean isList() {
-		return list;
+		return isList;
 	}
 	
 	public void setList(boolean list) {
-		this.list = list;
+		this.isList = list;
+	}
+	
+	public boolean isEnum() {
+		return isEnum;
+	}
+	
+	public void setEnum(boolean isEnum) {
+		this.isEnum = isEnum;
 	}
 	
 	public void update() {

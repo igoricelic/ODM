@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.orm.v_1.SimpleDocumentMapper.model.MDatabase;
 import com.orm.v_1.SimpleDocumentMapper.model.MDocument;
 import com.orm.v_1.SimpleDocumentMapper.model.exceptions.NotSupportEntity;
+import com.orm.v_1.SimpleDocumentMapper.model.util.Util;
 import com.orm.v_1.SimpleDocumentMapper.odm.config.ConnectionPool;
 import com.orm.v_1.SimpleDocumentMapper.odm.config.IndigoConfigurator;
 import com.orm.v_1.SimpleDocumentMapper.odm.scanner.ModelMapperScanner;
@@ -13,9 +14,11 @@ import com.orm.v_1.SimpleDocumentMapper.odm.scanner.impl.ModelMapperScannerImpl;
 import com.orm.v_1.SimpleDocumentMapper.proxy.ProxyRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.CrudRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.PagingAndSortingRepository;
+import com.orm.v_1.SimpleDocumentMapper.repositories.Repository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.SpecificationRepository;
 import com.orm.v_1.SimpleDocumentMapper.repositories.impl.CrudRepositoryImpl;
 import com.orm.v_1.SimpleDocumentMapper.repositories.impl.PagingAndSortingRepositoryImpl;
+import com.orm.v_1.SimpleDocumentMapper.repositories.impl.RepositoryImpl;
 import com.orm.v_1.SimpleDocumentMapper.repositories.impl.SpecificationRepositoryImpl;
 
 public class IndigoConfiguratorImpl implements IndigoConfigurator {
@@ -29,12 +32,24 @@ public class IndigoConfiguratorImpl implements IndigoConfigurator {
 		ModelMapperScanner modelMapperScanner = new ModelMapperScannerImpl();
 		this.mDatabase = modelMapperScanner.scanEntities(database, port, entities);
 	}
-
-	@Override
-	public MDatabase provideModel() {
-		return this.mDatabase;
+	
+	public IndigoConfiguratorImpl(String host, int port, String database, String pathOfEntitiesPackage) {
+		List<Class<?>> entities = Util.find(pathOfEntitiesPackage);
+		this.connectionPool = new ConnectionPoolImpl(database, host, port);
+		ModelMapperScanner modelMapperScanner = new ModelMapperScannerImpl();
+		this.mDatabase = modelMapperScanner.scanEntities(database, port, entities);
 	}
 
+	@Override
+	public <T> Repository<T> provideRepository(Class<?> entity) {
+		Optional<MDocument> optionalDocumentMetadata = mDatabase.getDocumentMetadata(entity);
+		if(optionalDocumentMetadata.isPresent()) {
+			MDocument document = optionalDocumentMetadata.get();
+			return new RepositoryImpl<>(document, connectionPool);
+		}
+		throw new NotSupportEntity("This isn't entity class!");
+	}
+	
 	@Override
 	public <T> CrudRepository<T> provideCrudRepository(Class<?> entity) {
 		Optional<MDocument> optionalDocumentMetadata = mDatabase.getDocumentMetadata(entity);
@@ -66,7 +81,11 @@ public class IndigoConfiguratorImpl implements IndigoConfigurator {
 	}
 
 	@Override
-	public <T> T provideProxy(Class<?> repositoryClass, Class<T> entityClass) {
+	public <T> T provideProxy(Class<?> repositoryClass) {
+		Class<?> entityClass = Util.mineEntityType(repositoryClass);
+		if(Util.isNull(entityClass)) {
+			// TODO: Exception
+		}
 		Optional<MDocument> optionalDocumentMetadata = mDatabase.getDocumentMetadata(entityClass);
 		if(!optionalDocumentMetadata.isPresent()) {
 			// TODO: Exception
