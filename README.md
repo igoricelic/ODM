@@ -39,9 +39,9 @@ IndigoConfigurator configurator = new IndigoConfiguratorImpl(-db_host-, -db_port
 IndigoConfigurator configurator = new IndigoConfiguratorImpl(-db_host-, -db_port-, -db-, -path_to_package_with_entities-);
 
 // After configuration, we can create repository for our entity
-configurator.provideCrudRepository(Entity.class)
+CrudRepository<Entity> crudRepositoryDAO = configurator.provideCrudRepository(Entity.class)
 // Or create proxy for our custom repository bean
-configurator.provideProxy(CustomRepository.class)
+CustomRepository myCustomRepoDAO = configurator.provideProxy(CustomRepository.class)
 ```
 
 ### Mapping
