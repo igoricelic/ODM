@@ -27,6 +27,9 @@ Maven dependency
  <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
+## Architecture
+
+![alt text](https://github.com/igoricelic/ODM/blob/master/IndigoArchitekture.png)
 
 ## Use
 
