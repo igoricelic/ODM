@@ -1,6 +1,9 @@
 # Indigo Framework - ODM
 
 This is the open-source ODM (Object Document Mapper) library for MongoDB written in JAVA and part of <b>Indigo Project Framework</b>
+
+Version: 1.0.0
+Licence: MIT
 .
 
 ## Install
