@@ -1,6 +1,7 @@
-package com.orm.v_1.SimpleDocumentMapper.interpreter;
+ package com.orm.v_1.SimpleDocumentMapper.interpreter;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -30,8 +31,9 @@ public class InterpreterProviderImpl implements InterpreterProvider {
 
 	@Override
 	public MethodMetadata interpretMethod(Method method, MDocument documentMetadata) {
-		List<Token> tokens = lexerProvider.processing(method.getName(), documentMetadata);
-		MethodMetadata methodMetadata = semanticProvider.processing(tokens);
+		Parameter[] parameters = method.getParameters();
+		List<Token> tokens = lexerProvider.processing(method.getName(), documentMetadata, parameters.length);
+		MethodMetadata methodMetadata = semanticProvider.processing(tokens, parameters, method.getName());
 		return resolveReturnType(methodMetadata, method, documentMetadata);
 	}
 	

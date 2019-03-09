@@ -48,9 +48,6 @@ public class ProxyRepository<T> extends PagingAndSortingRepositoryImpl<T> implem
 			*/
 			
 			MethodMetadata methodMetadata = gridData.get(method);
-			if(methodMetadata.getTotalArguments() > args.length) {
-				// TODO: Exception
-			}
 			Specification<T> specification = specificationResolver.prepareSpecificaiton(methodMetadata.getSpecificationProposal(), args);
 			
 			switch(methodMetadata.getMethodPrefixType()) {

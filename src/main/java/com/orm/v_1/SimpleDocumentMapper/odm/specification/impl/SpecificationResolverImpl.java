@@ -120,11 +120,7 @@ public class SpecificationResolverImpl implements SpecificationResolver {
 		
 		for(CriterionProposal criterionProposal: specificationProposal.getCriterionProposals()) {
 			Object value = args[criterionProposal.getArgumentPosition()];
-			if(!criterionProposal.getFieldMetadata().getJavaType().equals(value.getClass())) {
-				throw new NotCompatibleTypesException("Not compatible types: "+criterionProposal.getFieldMetadata().getJavaType().getName()+" "+value.getClass().getName());
-			}
 			builder.addCriterion(criterionProposal.getField(), value, criterionProposal.getComparator());
-			
 		}
 		if(!Util.isNull(specificationProposal.getOperator())) builder.operator(specificationProposal.getOperator());
 		

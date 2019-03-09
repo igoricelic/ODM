@@ -7,6 +7,6 @@ import com.orm.v_1.SimpleDocumentMapper.model.MDocument;
 
 public interface LexerProvider {
 	
-	public List<Token> processing(String specificationText, MDocument documentMetadata);
+	public List<Token> processing(String specificationText, MDocument documentMetadata, int totalParameters);
 
 }
